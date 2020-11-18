@@ -425,8 +425,6 @@ definitions:
       publisher:
         type: string
         description: Organization that provided the event that this place is associated with
-      "@id":
-        type: string
       replaced_by:
         "$ref": '#/definitions/place'
 
@@ -479,8 +477,6 @@ definitions:
       license:
         type: string
         description: License data for the image. May be "cc_by" (default) or "event_only". The latter license restricts use of the image and is specified on the API front page.
-      "@id":
-        type: string
   image_url:
     title: Image URL
     description: Images URL
@@ -833,10 +829,13 @@ definitions:
         description: organization responsible for the practical implementation of the event
         properties:
           fi:
+            type: string
             description: provider name in Finnish for the event
           sv:
+            type: string
             description: provider name in Swedish for the event
           en:
+            type: string
             description: provider name in English for the event
       location_extra_info:
         type: object
