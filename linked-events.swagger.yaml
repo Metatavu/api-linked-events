@@ -433,8 +433,7 @@ definitions:
     - url
     properties:
       id:
-        type: integer
-        format: int64
+        type: string
         description: image id
       name:
         type: object
@@ -696,6 +695,222 @@ definitions:
     properties:
       "@id":
         type: string
+  post_event:
+    type: object
+    description: 'Describes the actual events. Linked events API supports organizing events into hierarchies. This is implemented with collection events called "super events". Super events are normal event objects, that reference contained events in "sub_events" property. Currently there are two major use cases: events such as "Helsinki Festival", which consist of unique events over a span of time and recurring events such as theatrical productions with multiple showings. It is implementation dependent how the grouping of events is done. It should be noted that grouping might be automatic based on eg. event name and thus group unrelated events together and miss related events. Users of data are advised to prepare for this.'
+    required:
+    - name
+    - location
+    - start_time
+    - keywords
+    - publication_status
+    properties:
+      id:
+        description: consists of source prefix and source specific identifier. These should be URIs uniquely identifying the event, and preferably also well formed http-URLs pointing to more information about the event.
+        type: string
+      location:
+        "$ref": '#/definitions/id_ref'
+      keywords:
+        description: The keywords that describe the topic and type of this event.
+        type: array
+        items:
+          "$ref": '#/definitions/id_ref'
+      in_language:
+        description: the languages spoken or supported at the event
+        type: array
+        items:
+          "$ref": '#/definitions/language'
+      super_event:
+        description: references the aggregate event containing this event
+        "$ref": '#/definitions/id_ref'
+      super_event_type:
+        description: If the event has sub_events, describes the type of the event. Current options are 'null', 'recurring', which means a repeating event, and 'umbrella', which means a major event that has subevents.
+        type: string
+      event_status:
+        type: string
+        description: As defined in schema.org/Event. Postponed events do not have a date set, rescheduled events have been moved to different date.
+      publication_status:
+        type: string
+        description: Only available in POST/PUT. Specifies whether the event should be published in the API ('public') or not ('draft').
+      external_links:
+        type: array
+        items:
+          "$ref": '#/definitions/eventlink'
+        description: See external link definition
+      offers:
+        type: array
+        items:
+          "$ref": '#/definitions/offer'
+        description: See offer definition
+      sub_events:
+        type: array
+        items:
+          "$ref": '#/definitions/event'
+        description: for aggregate events this contains references to all sub events. Usually this means that the sub events are part of series. The field 'super_event_type' tells the type of the aggregate event.
+      custom_data:
+        type: object
+        description: 'Key value field for custom data. FIXME: is there 6Aika-wide use case for this?'
+      name:
+        type: object
+        description: 'Short descriptive name for the event, recommended limit: 80 characters'
+        properties:
+          fi:
+            description: Name of the event in Finnish
+            type: string
+          sv:
+            description: Name of the event in Swedish
+            type: string
+          en:
+            description: Name of the event in English
+            type: string
+      images:
+        type: array
+        items:
+          "$ref": '#/definitions/id_ref'
+      created_time:
+        type: string
+        format: date-time
+        description: 'Creation time for the event entry.'
+      last_modified_time:
+        type: string
+        format: date-time
+        description: 'Time this event was modified in the datastore behind the API (not necessarily in the originating system)'
+      info_url:
+        description: Link (URL) to a page with more information about event
+        type: object
+        properties:
+          fi:
+            description: Link to Finnish page
+            type: string
+            format: url
+          sv:
+            description: Link to Swedish page
+            type: string
+            format: url
+          en:
+            description: Link to English page
+            type: string
+            format: url
+      description:
+        type: object
+        description: Long description for the event, several chapters
+        properties:
+          fi:
+            type: string
+            description: Finnish description of the event
+          sv:
+            type: string
+            description: Swedish description of the event
+          en:
+            type: string
+            description: English description of the event
+      short_description:
+        type: object
+        description: Short description for the event, recommended limit 140 characters
+        properties:
+          fi:
+            type: string
+            description: short Finnish description of the event
+          sv:
+            type: string
+            description: short Swedish description of the event
+          en:
+            type: string
+            description: short English description of the event
+      "@context":
+        type: string
+      "@type":
+        type: string
+      date_published:
+        type: string
+        format: date-time
+        description: Date this event is free to be published
+      provider:
+        type: object
+        description: Description of who is responsible for the practical implementation of the event
+        properties:
+          fi:
+            type: string
+            description: provider name in Finnish for the event
+          sv:
+            type: string
+            description: provider name in Swedish for the event
+          en:
+            type: string
+            description: provider name in English for the event
+      location_extra_info:
+        type: object
+        description: Unstructured extra info about location (like "eastern door of railway station")
+        properties:
+          fi:
+            type: string
+            description: location extra info in Finnish for the event
+          sv:
+            type: string
+            description: location extra info in Swedish for the event
+          en:
+            type: string
+            description: location extra info in English for the event
+      start_time:
+        type: string
+        format: date-time
+        description: Time the event will start
+      end_time:
+        type: string
+        format: date-time
+        description: Time the event will end
+      has_start_time:
+        type: boolean
+      has_end_time:
+        type: boolean
+      audience:
+        description: The audience groups (picked from keywords) this event is intended for
+        type: array
+        items:
+          "$ref": '#/definitions/keyword'
+      data_source:
+        type: string
+        description: Unique identifier (URI)for the system from which this event came from, preferably URL with more information about the system and its policies
+      created_by:
+        type: string
+        description: Name and email of the user who created this event. Only available for authorized users in the publisher organization hierarchy.
+      last_modified_by:
+        type: string
+        description: Name and email of the user who last edited this event. Only available for authorized users in the publisher organization hierarchy.
+      publisher:
+        type: string
+        description: Id for the organization that published this event in Linkedevents.
+      deleted:
+        type: boolean
+        description: Whether this event has been deleted in the original data source.
+      replaced_by:
+        "$ref": '#/definitions/event'
+      extension_course:
+        type: object
+        description: Linked Courses extra fields
+        properties:
+          enrolment_start_time:
+            type: string
+            format: date-time
+            description: Time enrolment for the course will start
+            example: "2018-08-01T08:00:00Z"
+          enrolment_end_time:
+            type: string
+            format: date-time
+            description: Time enrolment for the course will end
+            example: "2018-08-31T18:00:00Z"
+          maximum_attendee_capacity:
+            type: integer
+            description: Maximum number of people allowed to enrol for the course
+            example: 100
+          minimum_attendee_capacity:
+            type: integer
+            description: Minimum number of people required to enrol for the course
+            example: 10
+          remaining_attendee_capacity:
+            type: integer
+            description: Number of people still allowed to enrol for the course before it is full
+            example: 50
   event:
     title: Events
     type: object
@@ -798,20 +1013,26 @@ definitions:
         description: Long description for the event, several chapters
         properties:
           fi:
+            type: string
             description: Finnish description of the event
           sv:
+            type: string
             description: Swedish description of the event
           en:
+            type: string
             description: English description of the event
       short_description:
         type: object
         description: Short description for the event, recommended limit 140 characters
         properties:
           fi:
+            type: string
             description: short Finnish description of the event
           sv:
+            type: string
             description: short Swedish description of the event
           en:
+            type: string
             description: short English description of the event
       "@context":
         type: string
@@ -839,10 +1060,13 @@ definitions:
         description: Unstructured extra info about location (like "eastern door of railway station")
         properties:
           fi:
+            type: string
             description: location extra info in Finnish for the event
           sv:
+            type: string
             description: location extra info in Swedish for the event
           en:
+            type: string
             description: location extra info in English for the event
       start_time:
         type: string
@@ -1886,13 +2110,13 @@ paths:
       - name: event_object
         in: body
         schema:
-          $ref: '#/definitions/event'
+          $ref: '#/definitions/post_event'
       - name: event_objects
         in: body
         schema:
           type: array
           items:
-            $ref: '#/definitions/event'
+            $ref: '#/definitions/post_event'
 
     put:
       summary: Bulk update several events
@@ -1972,7 +2196,7 @@ paths:
         in: body
         description: Event object that should replace the existing event, note that some implementations may retain unspecified fields at their original values.
         schema:
-          $ref: '#/definitions/event'
+          $ref: '#/definitions/post_event'
     delete:
       summary: Delete an event
       description: Events can be deleted if the user has appropriate access permissions.
