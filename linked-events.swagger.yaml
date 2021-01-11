@@ -243,6 +243,11 @@ parameters:
     in: query
     type: string
     description: Filter events by publication status (either draft or public)
+  event_custom_data:
+    name: custom_data
+    in: query
+    type: string
+    description: comma delimitered list of custom data fields that must match. Fields and values are separated by ':' -sign.  
 
 definitions:
 
@@ -745,7 +750,7 @@ definitions:
       sub_events:
         type: array
         items:
-          "$ref": '#/definitions/event'
+          "$ref": '#/definitions/id_ref'
         description: for aggregate events this contains references to all sub events. Usually this means that the sub events are part of series. The field 'super_event_type' tells the type of the aggregate event.
       custom_data:
         type: object
@@ -962,7 +967,7 @@ definitions:
       sub_events:
         type: array
         items:
-          "$ref": '#/definitions/event'
+          "$ref": '#/definitions/id_ref'
         description: for aggregate events this contains references to all sub events. Usually this means that the sub events are part of series. The field 'super_event_type' tells the type of the aggregate event.
       custom_data:
         type: object
@@ -2090,6 +2095,7 @@ paths:
         - $ref: '#/parameters/event_address_locality_en'
         - $ref: '#/parameters/event_language'
         - $ref: '#/parameters/event_publication_status'
+        - $ref: '#/parameters/event_custom_data'
     post:
       summary: Create a new event or events
       operationId: event_create
