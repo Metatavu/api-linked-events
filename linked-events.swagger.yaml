@@ -2099,7 +2099,9 @@ paths:
         201:
           description: Object(s) has/have been succesfully created. A copy of the object(s) is returned in response body and headers contain Location pointing to the created event
           schema:
-            $ref: '#/definitions/event'
+            type: array
+            items:
+              $ref: '#/definitions/event'
         400:
           description: Input format was not correct, eg. mandatory field was missing or JSON was malformed
         401:
