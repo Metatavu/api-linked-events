@@ -280,15 +280,12 @@ definitions:
         type: string
         description: Consists of source prefix and source specific identifier. These should be URIs uniquely identifying the place, and preferably also well formed http-URLs pointing to more information about the place.
       custom_data:
-        type: array
+        type: object
         description: 'Key value field for custom data. FIXME: is there 6Aika-wide use case for this?'
-        items:
-          type: object
-          properties:
-            key:
-              type: string
-            value:
-              type: string
+        properties:
+          listed:
+            type: string
+            description: is place listed or not
       name:
         type: object
         description: Name of the place, multilingual
