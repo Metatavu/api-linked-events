@@ -670,6 +670,64 @@ definitions:
           description: Keywords that belong to this keyword_set
           items:
             "$ref": '#/definitions/keyword'
+
+  post_keyword_set:
+      title: Keyword set
+      description: Keyword sets are used to group keywords together into classification groups. For example, one set of keywords might describe themes used by an event provider and another could be used to describe audience groups.
+      type: object
+      required:
+      - id
+      - name
+      - keywords
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this keyword_set. These should be URIs identifying the source and the keyword_set itself, and preferably also well formed http-URLs pointing to more information about the keyword.
+        name:
+          type: object
+          properties:
+            fi:
+              type: string
+              description: Keyword set name in Finnish
+            sv:
+              type: string
+              description: Keyword set name in Swedish
+            en:
+              type: string
+              description: Keyword set name in English
+        origin_id:
+          type: string
+          description: 'Set identifier in the originating system, if any'
+        created_time:
+          type: string
+          format: date-time
+          description: Time when this keyword_set was created (ISO 8601)
+        last_modified_time:
+          type: string
+          format: date-time
+          description: Time when this keyword_set was last modified (ISO 8601)
+        data_source:
+          type: string
+          description: Unique identifier (URI)for the system where this keyword_set originated, if any
+        last_modified_by:
+          type: string
+          description: FIXME(verify) Which API user most recently edited this keyword
+        usage:
+          type: string
+          description: 'Usage type for this keyword_set. These are allow UIs to show the set in appropriate place. FIXME: set of types is not finalized by any stretch'
+          enum:
+          - any
+          - keyword
+          - audience
+        organization:
+          type: string
+          description: Organization that has defined this keyword_set
+        keywords:
+          type: array
+          description: Keywords that belong to this keyword_set
+          items:
+            "$ref": '#/definitions/id_ref'
+
   language:
     title: Languages supported in this API
     type: object
@@ -1556,6 +1614,27 @@ paths:
       responses:
         200:
           description: Keyword_set record
+          schema:
+            $ref: '#/definitions/keyword_set'
+    put:
+      summary: Update single keyword_set
+      operationId: keyword_set_update
+      tags:
+      - filter
+      parameters:
+        - type: string
+          description: Same as id in keyword_set schema
+          in: path
+          name: id
+          required: true
+        - name: keyword_set_object
+          in: body
+          description: Keyword set object that should replace the existing keyword set
+          schema:
+            $ref: "#/definitions/post_keyword_set"
+      responses:
+        200:
+          description: Updated Keyword_set record
           schema:
             $ref: '#/definitions/keyword_set'
 
